@@ -153,7 +153,7 @@ fn daemon_ready(session: &str) -> bool {
     }
 }
 
-pub fn ensure_daemon(session: &str, headed: bool) -> Result<(), String> {
+pub fn ensure_daemon(session: &str, headed: bool, executable_path: Option<&str>) -> Result<(), String> {
     if is_daemon_running(session) && daemon_ready(session) {
         return Ok(());
     }
@@ -184,6 +184,10 @@ pub fn ensure_daemon(session: &str, headed: bool) -> Result<(), String> {
 
         if headed {
             cmd.env("AGENT_BROWSER_HEADED", "1");
+        }
+
+        if let Some(path) = executable_path {
+            cmd.env("AGENT_BROWSER_EXECUTABLE_PATH", path);
         }
 
         // Create new process group and session to fully detach
@@ -218,6 +222,10 @@ pub fn ensure_daemon(session: &str, headed: bool) -> Result<(), String> {
 
         if headed {
             cmd.env("AGENT_BROWSER_HEADED", "1");
+        }
+
+        if let Some(path) = executable_path {
+            cmd.env("AGENT_BROWSER_EXECUTABLE_PATH", path);
         }
 
         // CREATE_NEW_PROCESS_GROUP | DETACHED_PROCESS

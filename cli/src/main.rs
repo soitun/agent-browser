@@ -149,7 +149,7 @@ fn main() {
         }
     };
 
-    if let Err(e) = ensure_daemon(&flags.session, flags.headed) {
+    if let Err(e) = ensure_daemon(&flags.session, flags.headed, flags.executable_path.as_deref()) {
         if flags.json {
             println!(r#"{{"success":false,"error":"{}"}}"#, e);
         } else {
